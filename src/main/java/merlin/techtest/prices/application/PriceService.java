@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import merlin.techtest.prices.domain.models.Filter;
 import merlin.techtest.prices.domain.models.Price;
+import merlin.techtest.prices.exception.PriceNotFoundException;
+import merlin.techtest.prices.infrastructure.repository.PriceEntity;
 import merlin.techtest.prices.infrastructure.repository.PriceRepository;
 
 @Service
@@ -23,8 +25,11 @@ public class PriceService {
     }
     
     @Transactional
-    public List<Price> getFilteredPrice(Filter filter){
-        return repository.findPricesByFilter(null, null, null, null)
-        .stream().map(price -> modelMapper.map(price, Price.class)).collect(Collectors.toList());
+    public Price getFilteredPrice(Filter filter){
+        PriceEntity price = repository.findPricesByFilter(filter.getProductId(), filter.getBrandId(), filter.getDate());
+        if (price == null) {
+            throw new PriceNotFoundException("No se encontró el precio para ese producto de esa marca para esa fecha.");
+        }
+        return modelMapper.map(price, Price.class);
     }
 }

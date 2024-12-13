@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 import merlin.techtest.prices.application.PriceService;
 import merlin.techtest.prices.domain.models.Filter;
 import merlin.techtest.prices.domain.models.Price;
+import merlin.techtest.prices.exception.PriceNotFoundException;
 
-import java.util.List;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,8 +24,13 @@ public class PriceController {
     }
 
     @GetMapping("/api/price")
-    public List<Price> getPriceByFilter(@RequestBody Filter filter) {
+    public Price getPriceByFilter(@RequestBody Filter filter) {
         return service.getFilteredPrice(filter);
     }
     
+    @ExceptionHandler(PriceNotFoundException.class)
+    public ResponseEntity<String> handlePriceNotFoundException(PriceNotFoundException exception) {
+        return new ResponseEntity<>("Error: " + exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
 }

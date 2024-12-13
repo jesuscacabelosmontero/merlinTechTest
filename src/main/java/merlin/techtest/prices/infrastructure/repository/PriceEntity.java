@@ -31,10 +31,10 @@ public class PriceEntity {
     private LocalDateTime endDate;
 
     @Column(name = "PRICE_LIST")
-    private Integer priceList;
+    private Long priceList;
 
     @Column(name = "PRIORITY")
-    private Integer priority;
+    private Long priority;
 
     @Column(name = "PRICE")
     private BigDecimal price;

@@ -1,7 +1,6 @@
 package merlin.techtest.prices.infrastructure.repository;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Repository;
 
@@ -18,17 +17,16 @@ public class PriceRepository implements PricePort {
     }
 
     @Override
-    public List<PriceEntity> findPricesByFilter(
+    public PriceEntity findPricesByFilter(
         Long productId, 
         Long brandId, 
-        LocalDate applicationDateStart, 
-        LocalDate applicationDateEnd
+        LocalDateTime applicationDate
     ) {
-        return priceJpaRepository.findByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+        return priceJpaRepository.findTopByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
             productId, 
             brandId, 
-            applicationDateStart, 
-            applicationDateEnd
+            applicationDate,
+            applicationDate
         );
     }
 }

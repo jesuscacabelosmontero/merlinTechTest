@@ -25,7 +25,6 @@ public class PriceRepository implements PricePort {
         return priceJpaRepository.findTopByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
             productId, 
             brandId, 
-            applicationDate,
             applicationDate
         );
     }
